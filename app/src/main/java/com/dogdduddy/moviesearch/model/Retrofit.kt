@@ -4,13 +4,14 @@ import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.create
 
 
 object Retrofit {
     private const val BASE_URL = "https://openapi.naver.com/v1/"
     private var retrofit: Retrofit? = null
 
-    val instance: Retrofit
+    val instance: RetrofitAPI
         get() {
             val gson = GsonBuilder()
                 .setLenient()
@@ -22,6 +23,6 @@ object Retrofit {
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
             }
-            return retrofit!!
+            return retrofit!!.create(RetrofitAPI::class.java)
         }
 }
