@@ -1,5 +1,6 @@
 package com.dogdduddy.moviesearch.view
 
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,8 +15,7 @@ class MyAdapter
 
     class MyViewHolder(private val binding : ItemLayoutBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(post : Post){
-            Log.d("tst5", "bind: ${post} 바인드됨")
-            binding.userIdText.text = post.title
+            binding.userIdText.text = Html.fromHtml(post.title, 0).toString()
             binding.idText.text = post.pubdate
             binding.titleText.text = post.userRating
             binding.bodyText.text = post.link

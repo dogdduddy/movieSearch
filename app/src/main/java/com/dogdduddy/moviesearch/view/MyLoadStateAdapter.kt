@@ -1,4 +1,4 @@
-package com.dogdduddy.moviesearch.model
+package com.dogdduddy.moviesearch.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ class MyLoadStateAdapter(private val retry: () -> Unit)
 
 
     override fun onBindViewHolder(
-        holder: MyLoadStateAdapter.LoadStateViewHolder,
+        holder: LoadStateViewHolder,
         loadState: LoadState
     ) {
         holder.bind(loadState)
@@ -22,7 +22,7 @@ class MyLoadStateAdapter(private val retry: () -> Unit)
     override fun onCreateViewHolder(
         parent: ViewGroup,
         loadState: LoadState
-    ): MyLoadStateAdapter.LoadStateViewHolder {
+    ): LoadStateViewHolder {
         val binding = LoadStateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LoadStateViewHolder(binding)
     }

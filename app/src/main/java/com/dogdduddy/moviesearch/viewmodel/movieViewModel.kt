@@ -4,9 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-
-class movieViewModel(
-    private val repository : moviewRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+@HiltViewModel
+class movieViewModel @Inject constructor(
+    val repository : movieRepository
 ) : ViewModel() {
 
     private val myCustomPosts2 : MutableLiveData<String> = MutableLiveData()

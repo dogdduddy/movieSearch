@@ -1,17 +1,16 @@
-package com.dogdduddy.moviesearch.viewmodel
+package com.dogdduddy.moviesearch.model
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
-import com.dogdduddy.moviesearch.model.MoviePagingSource
-import com.dogdduddy.moviesearch.model.Post
-import com.dogdduddy.moviesearch.model.Retrofit
+import com.dogdduddy.moviesearch.network.Retrofit
+import com.dogdduddy.moviesearch.viewmodel.movieRepository
+import javax.inject.Inject
 
-class moviewRepository {
-    fun getPost(queryString: String): LiveData<PagingData<Post>> {
+class movieRepositoryImpl @Inject constructor(): movieRepository {
+    override fun getPost(queryString: String): LiveData<PagingData<Post>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5,

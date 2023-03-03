@@ -4,31 +4,21 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dogdduddy.moviesearch.BuildConfig
 import com.dogdduddy.moviesearch.databinding.ActivityMainBinding
-import com.dogdduddy.moviesearch.model.MyLoadStateAdapter
-import com.dogdduddy.moviesearch.model.PostResponse
-import com.dogdduddy.moviesearch.model.Retrofit
-import com.dogdduddy.moviesearch.model.RetrofitAPI
 import com.dogdduddy.moviesearch.viewmodel.movieViewModel
-import com.dogdduddy.moviesearch.viewmodel.moviewRepository
-import com.dogdduddy.moviesearch.viewmodel.viewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
 
-    private lateinit var viewModel: movieViewModel
+    private val viewModel: movieViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private val myAdapter by lazy { MyAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +30,6 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = myAdapter
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        val repository = moviewRepository()
-        val viewModelFactory = viewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(movieViewModel::class.java)
 
         // 받아온 값을 리싸이클러뷰에 보여줌
         binding.button.setOnClickListener {
@@ -61,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         // 관찰하여 submitData 메소드로 넘겨줌
         viewModel.result.observe(this, Observer {
             myAdapter.submitData(this.lifecycle, it)
-            Log.d("tst5", "호출됐음.")
         })
 
         // 로딩 상태 리스너
