@@ -1,8 +1,8 @@
 package com.dogdduddy.moviesearch.view
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,15 +10,13 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
+import com.dogdduddy.moviesearch.App
 import com.dogdduddy.moviesearch.databinding.ActivityMainBinding
-import com.dogdduddy.moviesearch.model.local.AppDatabase
-import com.dogdduddy.moviesearch.model.local.SearchLog
-import com.dogdduddy.moviesearch.viewmodel.movieViewModel
+import com.dogdduddy.moviesearch.viewmodel.MovieViewModel
+import com.dogdduddy.moviesearch.viewmodel.MovieViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -26,7 +24,9 @@ import java.util.Date
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
 
-    private val viewModel: movieViewModel by viewModels()
+    private val viewModel: MovieViewModel by viewModels {
+        MovieViewModelFactory((application as App).movieRepository,(application as App).searchLogRepository)
+    }
     private lateinit var binding: ActivityMainBinding
     private val myAdapter by lazy { MyAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,38 +34,42 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ///Room Test
-        val db = AppDatabase.getInstance(this)
-        val dao = db.SearchLogDao()
-        ////
-
         // 어댑터 연결
         binding.recyclerView.adapter = myAdapter
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        // 받아온 값을 리싸이클러뷰에 보여줌
-        binding.button.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                launch { dao.insertLog(SearchLog(binding.editTextView.text.toString(), Date())) }.join()
-                val log = async { dao.getAll() }.await()
-                Log.e("RoomTest", "log : $log")
-            }
-            /*
-            if (binding.editTextView.text.toString() != "") {
-                viewModel.searchPost(binding.editTextView.text.toString())
+        // 검색 기록에서 특정 키워드 클릭으로 넘어온 경우
+        if(intent.hasExtra("keyword")){
+            binding.searchEditText.setText(intent.getStringExtra("keyword"))
+            viewModel.searchPost(intent.getStringExtra("keyword")!!)
+        }
 
+        // 검색 기록 Activity로 이동
+        binding.searchLogBtn.setOnClickListener {
+            val intent = Intent(this, SearchLogActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 받아온 값을 리싸이클러뷰에 전달
+        binding.intentSearchLogBtn.setOnClickListener {
+            if (binding.searchEditText.text.toString() != "") {
+                viewModel.searchPost(binding.searchEditText.text.toString())
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.insertLog(binding.searchEditText.text.toString())
+                }
                 // 포커스 없애기
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(binding.editTextView.windowToken, 0)
-            }
+                inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
 
-             */
+                // 검색 후 키워드 제거
+                binding.searchEditText.setText("")
+            }
         }
 
-        // 관찰하여 submitData 메소드로 넘겨줌
-        viewModel.result.observe(this, Observer {
+        // 관찰하여 submitData 메소드로 넘기기
+        viewModel.movieLiveData.observe(this, Observer {
             myAdapter.submitData(this.lifecycle, it)
         })
 
