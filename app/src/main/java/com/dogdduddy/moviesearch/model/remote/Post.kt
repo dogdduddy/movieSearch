@@ -1,4 +1,4 @@
-package com.dogdduddy.moviesearch.model
+package com.dogdduddy.moviesearch.model.remote
 
 import com.google.gson.annotations.SerializedName
 
@@ -14,4 +14,3 @@ data class Post(
     @SerializedName("pubDate")
     val pubdate : String,
 )
-

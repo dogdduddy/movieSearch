@@ -1,4 +1,4 @@
-package com.dogdduddy.moviesearch.model
+package com.dogdduddy.moviesearch.model.remote
 
 data class PostResponse(
     val lastBuildDate : String,

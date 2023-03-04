@@ -1,15 +1,12 @@
-package com.dogdduddy.moviesearch.model
+package com.dogdduddy.moviesearch.model.remote
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.dogdduddy.moviesearch.BuildConfig
 import retrofit2.HttpException
 import java.io.IOException
 
-
 private const val STARTING_PAGE_INDEX = 1
-
 /*
 simpleApi : 데이터를 제공하는 인스턴스
 userId : 쿼리를 위한 값

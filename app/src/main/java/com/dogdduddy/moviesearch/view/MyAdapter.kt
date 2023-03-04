@@ -8,7 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dogdduddy.moviesearch.databinding.ItemLayoutBinding
-import com.dogdduddy.moviesearch.model.Post
+import com.dogdduddy.moviesearch.model.remote.Post
 
 class MyAdapter
     : PagingDataAdapter<Post, MyAdapter.MyViewHolder>(IMAGE_COMPARATOR) {

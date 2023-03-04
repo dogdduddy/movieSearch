@@ -1,4 +1,4 @@
-package com.dogdduddy.moviesearch.model
+package com.dogdduddy.moviesearch.model.remote
 
 import androidx.lifecycle.LiveData
 import androidx.paging.Pager

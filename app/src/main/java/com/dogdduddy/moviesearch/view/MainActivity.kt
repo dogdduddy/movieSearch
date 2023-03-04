@@ -10,9 +10,17 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.dogdduddy.moviesearch.databinding.ActivityMainBinding
+import com.dogdduddy.moviesearch.model.local.AppDatabase
+import com.dogdduddy.moviesearch.model.local.SearchLog
 import com.dogdduddy.moviesearch.viewmodel.movieViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.util.Date
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -26,6 +34,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        ///Room Test
+        val db = AppDatabase.getInstance(this)
+        val dao = db.SearchLogDao()
+        ////
+
         // 어댑터 연결
         binding.recyclerView.adapter = myAdapter
         binding.recyclerView.layoutManager =
@@ -33,15 +46,22 @@ class MainActivity : AppCompatActivity() {
 
         // 받아온 값을 리싸이클러뷰에 보여줌
         binding.button.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                launch { dao.insertLog(SearchLog(binding.editTextView.text.toString(), Date())) }.join()
+                val log = async { dao.getAll() }.await()
+                Log.e("RoomTest", "log : $log")
+            }
+            /*
             if (binding.editTextView.text.toString() != "") {
                 viewModel.searchPost(binding.editTextView.text.toString())
-                Log.d("tst5", "클릭됐음.")
 
                 // 포커스 없애기
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(binding.editTextView.windowToken, 0)
             }
+
+             */
         }
 
         // 관찰하여 submitData 메소드로 넘겨줌

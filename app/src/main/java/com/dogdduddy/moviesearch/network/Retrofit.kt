@@ -1,6 +1,6 @@
 package com.dogdduddy.moviesearch.network
 
-import com.dogdduddy.moviesearch.model.RetrofitAPI
+import com.dogdduddy.moviesearch.model.remote.RetrofitAPI
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
