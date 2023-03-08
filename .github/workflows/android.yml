@@ -24,4 +24,4 @@ jobs:
           
         - name: REST API with curl
           run: |
-            curl -d file=@app/build/outputs/apk/debug/app-debug.apk https://hook.swit.io/idea/230307065109463SsCZ/IEjiW66dKAn4Sbajy447
+            curl -d "@app/build/outputs/apk/debug/app-debug.apk" -X https://hook.swit.io/idea/230307065109463SsCZ/IEjiW66dKAn4Sbajy447
