@@ -31,7 +31,7 @@ jobs:
         - name: Slack - Upload APK
           uses: MeilCli/slack-upload-file@v1.0.0
           with:
-            slack_token: ${{ secrets.SWIT_WEBHOOK_URL }}  
+            slack_token: ${{ secrets.SWIT_TOKEN }}  
             channels: ${{ secrets.SWIT_CHANNEL }}
             initial_comment: 'APK File Upload'
             file_path: 'app/build/outputs/apk/debug/app-debug.apk'
