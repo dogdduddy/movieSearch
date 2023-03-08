@@ -15,4 +15,6 @@ class App:Application() {
 
     val movieRepository by lazy { MovieRepository() }
     val searchLogRepository by lazy { SearchLogRepository(database.SearchLogDao()) }
+
+
 }
