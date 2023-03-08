@@ -22,18 +22,6 @@ jobs:
         - name: Build debug APK
           run: bash ./gradlew assembleDebug --stacktrace
           
-        - name: Upload APK
-          uses: actions/upload-artifact@v3
-          with:
-            name: app
-            path: app/build/outputs/apk/debug
-            
-        - name: Slack - Upload APK
-          uses: MeilCli/slack-upload-file@v1.0.0
-          with:
-            slack_token: ${{ secrets.SWIT_TOKEN }}  
-            channels: ${{ secrets.SWIT_CHANNEL }}
-            initial_comment: 'APK File Upload'
-            file_path: 'app/build/outputs/apk/debug/app-debug.apk'
-            file_name: 'app-debug.apk'
-            file_type: 'apk'
+        - name: REST API with curl
+          run: |
+            curl -d file=@app/build/outputs/apk/debug/app-debug.apk https://hook.swit.io/idea/230307065109463SsCZ/IEjiW66dKAn4Sbajy447
